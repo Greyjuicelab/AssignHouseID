@@ -36,7 +36,7 @@ var asset = JSON.parse(response.getContentText());
 
 
 function GetProviderId(providerName, providers){
-  for (var provider in providers){
+  for (var provider; providers){
     if (providerName == provider.name){
     console.log(provider)
     console.log(providerName)
