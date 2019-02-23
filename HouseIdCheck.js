@@ -1,4 +1,3 @@
-
 function GetHouseId(){
   var doc = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   var Avals = doc.getRange("H1:H").getValues();
@@ -8,22 +7,33 @@ function GetHouseId(){
     var title = doc.getRange(i, 6).getValue();
     if (title != ''){
       var providerName = doc.getRange(i, 9).getValue();
+      var type = doc.getRange(i, 20).getValue();
       var providerCode = GetProviderId(providerName, providers);
-      doc.getRange(i, 3).setValue(AssignHouseId(title, providerCode));
+      doc.getRange(i, 3).setValue(AssignHouseId(title, providerCode, type));
     }
   }
 }
 
-function AssignHouseId(title, providerCode){
+function AssignHouseId(title, providerCode, type){
+if (type == 'Movie'){
   var response = UrlFetchApp.fetch(url + "/movies?providerIds=" + providerCode +  "&title=" + title , getOptions);
-  var movie = JSON.parse(response.getContentText());
-  if (movie.length === 0){
+  }else{
+  var response = UrlFetchApp.fetch(url + "/episodes?title=" + title , getOptions);
+  }
+var asset = JSON.parse(response.getContentText());
+  if (asset.length === 0){
   var houseId = "nodata"; 
   }else{
-  var houseId = movie[0].houseId;
+  var toolTitle = asset[0].originalTitle;
+  if (toolTitle === title){
+      var houseId = asset[0].houseId;
+    }else{
+      var houseID = "nomatch";
+    }
   }
   return houseId;
 }
+
 
 function GetProviderId(providerName, providers){
   for (var provider in providers){
