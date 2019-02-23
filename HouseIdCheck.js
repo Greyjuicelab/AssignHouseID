@@ -36,10 +36,10 @@ var asset = JSON.parse(response.getContentText());
 
 
 function GetProviderId(providerName, providers){
-  for (var provider; providers){
+  for each (var provider in providers){
     if (providerName == provider.name){
-    console.log(provider)
-    console.log(providerName)
+    Logger.log(provider)
+    Logger.log(providerName)
     var providerCode = provider.code;
     Logger.log(providerCode);
     return providerCode;}
@@ -49,6 +49,5 @@ function GetProviderId(providerName, providers){
 function ProviderList(){
   var response = UrlFetchApp.fetch(url + "/providers", getOptions);
   var providers = JSON.parse(response.getContentText());
-  Logger.log(providers);
   return providers;
 }
